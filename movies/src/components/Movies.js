@@ -8,7 +8,7 @@ export default class movies extends Component {
         super(props);
         this.state = {
             movies: getMovies(),
-            currval : ''
+            currval: ''
         }
     }
 
@@ -21,46 +21,95 @@ export default class movies extends Component {
         })
     }
 
-    hadlechange = (e) =>{
+    hadlechange = (e) => {
         let task = e.target.value;
         this.setState({ currval: task });
-        
-    } 
 
+    }
+
+    sortbyrating = (e) => {
+        let name = e.target.className;
+        console.log(name);
+
+        let sortedarr = []
+
+        if (name == 'fas fa-sort-up') {
+            // ascending 
+            sortedarr = this.state.movies.sort((a, b) => {
+                return a.dailyRentalRate - b.dailyRentalRate
+            });
+        } else {
+            // descending
+            sortedarr = this.state.movies.sort((a, b) => {
+                return b.dailyRentalRate - a.dailyRentalRate
+            });
+        }
+        this.setState({ movies: sortedarr });
+    }
+
+    sortbystock = (e) => {
+        let name = e.target.className;
+        console.log(name);
+        let sortedarr = []
+
+        if (name == 'fas fa-sort-up') {
+            // ascending 
+            sortedarr = this.state.movies.sort((a, b) => {
+                return a.numberInStock - b.numberInStock
+            });
+        } else {
+            // descending
+            sortedarr = this.state.movies.sort((a, b) => {
+                return b.numberInStock - a.numberInStock
+            });
+        }
+        this.setState({ movies: sortedarr });
+    }
 
 
     render() {
         let { movies, currval } = this.state
         let searchedmovies = [];
-        if(currval != ''){
-            searchedmovies = movies.filter(movieobj =>{
+        if (currval != '') {
+            searchedmovies = movies.filter(movieobj => {
                 let title = movieobj.title.trim().toLowerCase();
                 return title.includes(currval.toLowerCase())
             })
-        }else{
+        } else {
             searchedmovies = movies
         }
         return (
             <div className='row'>
-                <div className='col-3'>Hello</div>
+                <div className='title'>
+                    <h1 >Movie App in React</h1>
+                </div>
+                <div className='col-3 sidebar'>Hello</div>
                 <div className='col-9'>
                     <input type='text' value={this.state.currval} onChange={this.hadlechange}></input>
-                    <table className='table'>
+                    <table className='table table-striped table-dark'>
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Genre</th>
-                                <th scope="col">Stock</th>
-                                <th scope="col">Rating</th>
-                                <th scope='col'></th>
+                                <th scope="col">
+                                    <i className="fas fa-sort-up" onClick={this.sortbystock}></i>
+                                    <i className="fas fa-sort-down" onClick={this.sortbystock}></i>
+                                    Stock
+                                </th>
+                                <th scope="col">
+                                    <i className="fas fa-sort-up" onClick={this.sortbyrating}></i>
+                                    <i className="fas fa-sort-down" onClick={this.sortbyrating}></i>
+                                    Rating
+                                </th>
+                                <th scope='col'>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 searchedmovies.map(movieobj => (
                                     <tr className='movies-name' key={movieobj._id}>
-                                        <td></td>
+                                        <td>{(searchedmovies.indexOf(movieobj)) + 1}</td>
                                         <td>{movieobj.title}</td>
                                         <td>{movieobj.genre.name}</td>
                                         <td>{movieobj.numberInStock}</td>
@@ -72,6 +121,13 @@ export default class movies extends Component {
                         </tbody>
 
                     </table>
+                    <nav aria-label="...">
+                        <ul class="pagination pagination-sm">
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item "><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         )

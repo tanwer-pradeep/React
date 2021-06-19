@@ -1,0 +1,29 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    /* margin-top: 2rem !important; */
+    background-color:antiquewhite;
+}
+
+input{
+    box-sizing: border-box;
+    margin: 1rem 0;
+    width: 60%;
+}
+.sidebar{
+    /* position:absolute; */
+    height: 100vh;
+    background-color: darkgray;
+}
+.title{
+    /* width: 100vh; */
+    box-sizing: border-box;
+    display: flex;
+    background-color: black;
+    color: aliceblue;
+    justify-content: center;
+    align-items: center;    
+}
