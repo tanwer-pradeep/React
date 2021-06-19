@@ -8,7 +8,9 @@ export default class movies extends Component {
         super(props);
         this.state = {
             movies: getMovies(),
-            currval: ''
+            currval: '',
+            currpage: 1,
+            pagelimit: 4
         }
     }
 
@@ -66,9 +68,17 @@ export default class movies extends Component {
         this.setState({ movies: sortedarr });
     }
 
+    handlepage = (e) => {
+        let num = Number(e.target.value);
+        this.setState({ pagelimit: num })
+    }
+    handlepagechange = (pages) => {
+        this.setState({ currpage: pages })
+    }
 
     render() {
-        let { movies, currval } = this.state
+
+        let { movies, currval, currpage, pagelimit } = this.state
         let searchedmovies = [];
         if (currval != '') {
             searchedmovies = movies.filter(movieobj => {
@@ -76,8 +86,16 @@ export default class movies extends Component {
                 return title.includes(currval.toLowerCase())
             })
         } else {
-            searchedmovies = movies
+            searchedmovies = movies;
         }
+        let numofpages = Math.ceil(searchedmovies / pagelimit);
+        let pages = [];
+        for (let i = 0; i < numofpages; i++) {
+            pages.push(i + 1);
+        }
+        let si = (currpage - 1) * pagelimit;
+        let ei = si + pagelimit;
+        searchedmovies = searchedmovies.slice(si, ei);
         return (
             <div className='row'>
                 <div className='title'>
@@ -86,6 +104,8 @@ export default class movies extends Component {
                 <div className='col-3 sidebar'>Hello</div>
                 <div className='col-9'>
                     <input type='text' value={this.state.currval} onChange={this.hadlechange}></input>
+                    <input type='number' value={pagelimit > searchedmovies.length ? searchedmovies.length : pagelimit} onChange={this.handlepage} min='1' max={movies.length}></input>
+
                     <table className='table table-striped table-dark'>
                         <thead>
                             <tr>
@@ -122,10 +142,17 @@ export default class movies extends Component {
 
                     </table>
                     <nav aria-label="...">
-                        <ul class="pagination pagination-sm">
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item "><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <ul className="pagination">
+                            {
+                                pages.map(pages => {
+                                    let classnametoset = pages == currpage ? 'page-item active' : 'page-item'
+                                    return (
+                                        <li onClick={() => this.handlepagechange(pages)} className={classnametoset} key={pages}>
+                                            <span className="page-link">{pages}</span>
+                                        </li>
+                                    )
+                                })
+                            }
                         </ul>
                     </nav>
                 </div>
