@@ -16,7 +16,7 @@ export default class movies extends Component {
 
     onDelete = (id) => {
         let filteredmovies = this.state.movies.filter(movieobj => {
-            return movieobj._id != id;
+            return movieobj._id !== id;
         })
         this.setState({
             movies: filteredmovies
@@ -35,7 +35,7 @@ export default class movies extends Component {
 
         let sortedarr = []
 
-        if (name == 'fas fa-sort-up') {
+        if (name === 'fas fa-sort-up') {
             // ascending 
             sortedarr = this.state.movies.sort((a, b) => {
                 return a.dailyRentalRate - b.dailyRentalRate
@@ -54,7 +54,7 @@ export default class movies extends Component {
         console.log(name);
         let sortedarr = []
 
-        if (name == 'fas fa-sort-up') {
+        if (name === 'fas fa-sort-up') {
             // ascending 
             sortedarr = this.state.movies.sort((a, b) => {
                 return a.numberInStock - b.numberInStock
@@ -72,6 +72,7 @@ export default class movies extends Component {
         let num = Number(e.target.value);
         this.setState({ pagelimit: num })
     }
+    
     handlepagechange = (pages) => {
         this.setState({ currpage: pages })
     }
@@ -80,7 +81,7 @@ export default class movies extends Component {
 
         let { movies, currval, currpage, pagelimit } = this.state
         let searchedmovies = [];
-        if (currval != '') {
+        if (currval !== '') {
             searchedmovies = movies.filter(movieobj => {
                 let title = movieobj.title.trim().toLowerCase();
                 return title.includes(currval.toLowerCase())
@@ -99,7 +100,7 @@ export default class movies extends Component {
         for (let i = 0; i < numofpages; i++) {
             pages.push(i + 1);
         }
-        console.table(pages)
+        // console.table(pages)
         searchedmovies = searchedmovies.slice(si, ei);
        
        
@@ -152,7 +153,7 @@ export default class movies extends Component {
                         <ul className="pagination">
                             {
                                 pages.map(page => {
-                                    let classnametoset = page == currpage ? 'page-item active' : 'page-item'
+                                    let classnametoset = page ===  currpage ? 'page-item active' : 'page-item'
                                     return (
                                         <li onClick={() => this.handlepagechange(page)} className={classnametoset} key={page}>
                                             <span className="page-link">{page}</span>
