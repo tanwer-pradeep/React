@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { getMovies } from './moviescontent'
+// import { getMovies } from './moviescontent'
+import axios from 'axios'
 
 
 
@@ -7,11 +8,20 @@ export default class movies extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            movies: getMovies(),
+            movies: [],
             currval: '',
             currpage: 1,
             pagelimit: 4
         }
+    }
+
+    async componentDidMount(){
+        let promise = axios.get('https://backend-react-movie.herokuapp.com/movies');
+        let data = await promise;
+        // console.table(data.data.movies);
+        this.setState({
+            movies:data.data.movies
+        })
     }
 
     onDelete = (id) => {
@@ -31,7 +41,7 @@ export default class movies extends Component {
 
     sortbyrating = (e) => {
         let name = e.target.className;
-        console.log(name);
+        // console.log(name);
 
         let sortedarr = []
 
@@ -51,7 +61,7 @@ export default class movies extends Component {
 
     sortbystock = (e) => {
         let name = e.target.className;
-        console.log(name);
+        // console.log(name);
         let sortedarr = []
 
         if (name === 'fas fa-sort-up') {
@@ -72,7 +82,7 @@ export default class movies extends Component {
         let num = Number(e.target.value);
         this.setState({ pagelimit: num })
     }
-    
+
     handlepagechange = (pages) => {
         this.setState({ currpage: pages })
     }
