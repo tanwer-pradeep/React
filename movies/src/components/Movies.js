@@ -88,14 +88,21 @@ export default class movies extends Component {
         } else {
             searchedmovies = movies;
         }
-        let numofpages = Math.ceil(searchedmovies / pagelimit);
+        
+        
+        let si = (currpage - 1) * pagelimit;
+        let ei = si + pagelimit;
+        
+        let numofpages = Math.ceil(searchedmovies.length / pagelimit);
+        
         let pages = [];
         for (let i = 0; i < numofpages; i++) {
             pages.push(i + 1);
         }
-        let si = (currpage - 1) * pagelimit;
-        let ei = si + pagelimit;
+        console.table(pages)
         searchedmovies = searchedmovies.slice(si, ei);
+       
+       
         return (
             <div className='row'>
                 <div className='title'>
@@ -144,11 +151,11 @@ export default class movies extends Component {
                     <nav aria-label="...">
                         <ul className="pagination">
                             {
-                                pages.map(pages => {
-                                    let classnametoset = pages == currpage ? 'page-item active' : 'page-item'
+                                pages.map(page => {
+                                    let classnametoset = page == currpage ? 'page-item active' : 'page-item'
                                     return (
-                                        <li onClick={() => this.handlepagechange(pages)} className={classnametoset} key={pages}>
-                                            <span className="page-link">{pages}</span>
+                                        <li onClick={() => this.handlepagechange(page)} className={classnametoset} key={page}>
+                                            <span className="page-link">{page}</span>
                                         </li>
                                     )
                                 })
@@ -163,14 +170,3 @@ export default class movies extends Component {
 
 
 
-// {
-//     movies.map(movieobj =>(
-//         <div className='movies-name' key={movieobj._id}>
-//             <span>{movieobj.title}</span>
-//             <span>{movieobj.genre.name}</span>
-//             <span>{movieobj.numberInStock}</span>
-//             <span>{movieobj.dailyRentalRate}</span>
-//             <button onClick = {()=>this.onDelete(movieobj._id)}>Delete</button>
-//         </div>
-//     ))
-//  }
