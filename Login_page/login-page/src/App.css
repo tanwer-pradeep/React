@@ -1,10 +1,54 @@
+.main{
+  height: 100vh;
+  background: #e5f19e;
+}
+
+
+
 .login-form {
+  margin-top: 10%;
   justify-content: center;
   margin-left: 25%;
   width: 50%;
   height: 20rem;
   background: gray;
   text-align: center;
+}
+
+.input{
+  height: 3rem;
+  width: 50%;
+  
+}
+
+.submit{
+  margin-top: 2rem;
+  background-color: #309edf;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 20px;
+  border-radius: 7px;
+}
+
+.loginbtn{
+  margin-top: 2rem;
+  margin-left: 2rem;
+  background-color: #309edf;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 20px;
+  border-radius: 8px;
+}
+
+.loginbtn:hover{
+  background-color: #0790df;
+
+}
+
+.submit:hover{
+  background-color: #0790df;
 }
 
 
