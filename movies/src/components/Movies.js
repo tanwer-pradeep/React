@@ -11,14 +11,17 @@ export default class movies extends Component {
             movies: [],
             currval: '',
             currpage: 1,
-            pagelimit: 4
+            pagelimit: 4,
+            cGenere: 'All Genres',
+            genre:[{_id: 'abcd', name: 'All Generes'}]
         }
     }
 
     async componentDidMount() {
         let promise = axios.get('https://backend-react-movie.herokuapp.com/movies');
+        let promise2 = axios.get("https://backend-react-movie.herokuapp.com/generes")
         let data = await promise;
-        // console.table(data.data.movies);
+        let data2 = await promise2;
         this.setState({
             movies: data.data.movies
         })
