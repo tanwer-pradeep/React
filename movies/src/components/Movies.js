@@ -13,17 +13,18 @@ export default class movies extends Component {
             currpage: 1,
             pagelimit: 4,
             cGenere: 'All Genres',
-            genre:[{_id: 'abcd', name: 'All Generes'}]
+            genre: [{ _id: 'abcd', name: 'All Generes' }]
         }
     }
 
     async componentDidMount() {
         let promise = axios.get('https://backend-react-movie.herokuapp.com/movies');
-        let promise2 = axios.get("https://backend-react-movie.herokuapp.com/generes")
+        let promise2 = axios.get("https://backend-react-movie.herokuapp.com/genres")
         let data = await promise;
         let data2 = await promise2;
         this.setState({
-            movies: data.data.movies
+            movies: data.data.movies,
+            genres: [...this.state.genre, ...data2.data.genres]
         })
     }
 
@@ -33,6 +34,12 @@ export default class movies extends Component {
         })
         this.setState({
             movies: filteredmovies
+        })
+    }
+
+    handelgenreschange = (genre) => {
+        this.setState({
+            cGenre: genre
         })
     }
 
@@ -91,7 +98,7 @@ export default class movies extends Component {
     }
 
     render() {
-        let { movies, currval, currpage, pagelimit } = this.state
+        let { movies, currval, currpage, pagelimit, cGenere,genre} = this.state
         let searchedmovies = [];
         if (currval !== '') {
             searchedmovies = movies.filter(movieobj => {
@@ -119,73 +126,84 @@ export default class movies extends Component {
         return (
             <>
                 {
-                    this.state.movies.length === 0?  
-                    <button className="btn btn-primary" type="button" disabled>
-                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Loading...
-                  </button>
+                    this.state.movies.length === 0 ?
+                        <button className="btn btn-primary" type="button" disabled>
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </button>
 
-                   : <div className='row'>
+                        : <div className='row'>
 
-                        <div className='title'>
-                            <h1 >Movie App in React</h1>
-                        </div>
-                        <div className='col-3 sidebar'>Hello</div>
-                        <div className='col-9'>
-                            <input type='text' value={this.state.currval} onChange={this.hadlechange}></input>
-                            <input type='number' value={pagelimit > searchedmovies.length ? searchedmovies.length : pagelimit} onChange={this.handlepage} min='1' max={movies.length}></input>
-
-                            <table className='table table-striped table-dark'>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Genre</th>
-                                        <th scope="col">
-                                            <i className="fas fa-sort-up" onClick={this.sortbystock}></i>
-                                            <i className="fas fa-sort-down" onClick={this.sortbystock}></i>
-                                            Stock
-                                        </th>
-                                        <th scope="col">
-                                            <i className="fas fa-sort-up" onClick={this.sortbyrating}></i>
-                                            <i className="fas fa-sort-down" onClick={this.sortbyrating}></i>
-                                            Rating
-                                        </th>
-                                        <th scope='col'>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                            <div className='title'>
+                                <h1 >Movie App in React</h1>
+                            </div>
+                            <div className='col-3 sidebar'>
+                                <ul className="list-group">
                                     {
-                                        searchedmovies.map(movieobj => (
-                                            <tr className='movies-name' key={movieobj._id}>
-                                                <td>{(searchedmovies.indexOf(movieobj)) + 1}</td>
-                                                <td>{movieobj.title}</td>
-                                                <td>{movieobj.genre.name}</td>
-                                                <td>{movieobj.numberInStock}</td>
-                                                <td>{movieobj.dailyRentalRate}</td>
-                                                <td><button type="button" className="btn btn-danger" onClick={() => this.onDelete(movieobj._id)}>Delete</button></td>
-                                            </tr>
+                                        genre.map((genreObj) => (
+                                            <li onClick={() => this.handelgenreschange(genreObj.name)} key={genreObj._id} className='list-group-item'>
+                                                {genreObj.name}
+                                            </li>
                                         ))
                                     }
-                                </tbody>
-
-                            </table>
-                            <nav aria-label="...">
-                                <ul className="pagination">
-                                    {
-                                        pages.map(page => {
-                                            let classnametoset = page === currpage ? 'page-item active' : 'page-item'
-                                            return (
-                                                <li onClick={() => this.handlepagechange(page)} className={classnametoset} key={page}>
-                                                    <span className="page-link">{page}</span>
-                                                </li>
-                                            )
-                                        })
-                                    }
                                 </ul>
-                            </nav>
+                                <h5>Current Genre {cGenere}</h5>
+                            </div>
+                            <div className='col-9'>
+                                <input type='text' value={this.state.currval} onChange={this.hadlechange}></input>
+                                <input type='number' value={pagelimit > searchedmovies.length ? searchedmovies.length : pagelimit} onChange={this.handlepage} min='1' max={movies.length}></input>
+
+                                <table className='table table-striped table-dark'>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Title</th>
+                                            <th scope="col">Genre</th>
+                                            <th scope="col">
+                                                <i className="fas fa-sort-up" onClick={this.sortbystock}></i>
+                                                <i className="fas fa-sort-down" onClick={this.sortbystock}></i>
+                                                Stock
+                                            </th>
+                                            <th scope="col">
+                                                <i className="fas fa-sort-up" onClick={this.sortbyrating}></i>
+                                                <i className="fas fa-sort-down" onClick={this.sortbyrating}></i>
+                                                Rating
+                                            </th>
+                                            <th scope='col'>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            searchedmovies.map(movieobj => (
+                                                <tr className='movies-name' key={movieobj._id}>
+                                                    <td>{(searchedmovies.indexOf(movieobj)) + 1}</td>
+                                                    <td>{movieobj.title}</td>
+                                                    <td>{movieobj.genre.name}</td>
+                                                    <td>{movieobj.numberInStock}</td>
+                                                    <td>{movieobj.dailyRentalRate}</td>
+                                                    <td><button type="button" className="btn btn-danger" onClick={() => this.onDelete(movieobj._id)}>Delete</button></td>
+                                                </tr>
+                                            ))
+                                        }
+                                    </tbody>
+
+                                </table>
+                                <nav aria-label="...">
+                                    <ul className="pagination">
+                                        {
+                                            pages.map(page => {
+                                                let classnametoset = page === currpage ? 'page-item active' : 'page-item'
+                                                return (
+                                                    <li onClick={() => this.handlepagechange(page)} className={classnametoset} key={page}>
+                                                        <span className="page-link">{page}</span>
+                                                    </li>
+                                                )
+                                            })
+                                        }
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
-                    </div>
                 }
             </>
 
