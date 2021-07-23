@@ -1,5 +1,6 @@
 import React ,{ Component } from 'react';
 import './App.css';
+import Navbar from './components/Navbar';
 
 
 // here we are making it a class component
@@ -18,7 +19,10 @@ class App extends Component{
       one div from jsx code 
       */
       <div className="App">
-        This is 1st React app.
+        <Navbar />
+        <h2>
+          This is 1st React app.
+        </h2>
       </div>
     )
     
