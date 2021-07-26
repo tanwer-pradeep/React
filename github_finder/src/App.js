@@ -1,47 +1,19 @@
-import React ,{ Component } from 'react';
-import './App.css';
-import Navbar from './components/Navbar';
-import UserItem from './components/UserItem'
+import React, { Component } from 'react';
+import'./App.css'
+import Navbar from './components/layouts/Navbar';
+import Users from './components/users/Users';
 
-class App extends Component{
-
-
-  render(){
-    return(
-      
+export class App extends Component {
+  render() {
+    return (
       <div className="App">
-        <Navbar />
-        <UserItem/>
-        <UserItem/>
-        <UserItem/>
-        <UserItem/>
-        <UserItem/>
-
+        <Navbar title="GitHub Finder" />
+        <h1>Hello</h1>
+        <Users/>
         
       </div>
     )
-    
   }
-
-
-
 }
 
-export default App;
-
-
-
-
-
-
-// by default app.js is a functional component
-
-// function App() {
-//   return (
-//     <>
-//     hello
-//     </>
-//   );
-// }
-
- 
+export default App
